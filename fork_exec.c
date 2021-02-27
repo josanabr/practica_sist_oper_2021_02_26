@@ -4,14 +4,9 @@
 #include <sys/wait.h> // wait()
 
 void child() {
-  char *const argv[] = {"ls", NULL};
-
-  printf(" CHILD <%ld> Press any key to make me call exec!\n",
-         (long) getpid());
+  char *const argv[] = {"cat", "leer_cadena.c", NULL};
 
   fflush(stdout);
-
-  getchar();
 
   execvp(argv[0], argv);
 
@@ -22,18 +17,12 @@ void child() {
 void parent(pid_t pid) {
   int status;
 
-  printf("PARENT <%ld> Spawned a child with PID = %ld.\n",
-         (long) getpid(), (long) pid);
-
   wait(&status);
 
   if (WIFEXITED(status)) {
     printf("PARENT <%ld> Child with PID = %ld and exit status = %d terminated.\n",
            (long) getpid(), (long) pid, WEXITSTATUS(status));
   }
-
-  printf("PARENT <%ld> Goodbye!\n",
-         (long) getpid());
 
   exit(EXIT_SUCCESS);
 }
